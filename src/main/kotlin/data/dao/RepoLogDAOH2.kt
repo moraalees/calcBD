@@ -48,8 +48,8 @@ class RepoLogDAOH2(private val ds: DataSource) : IRepoLogDAO {
             if (info is Calculo) {
                 val stmt = conn.prepareStatement(sql)
                 stmt.setDouble(1, info.numero1)
-                stmt.setDouble(2, info.numero2)
-                stmt.setString(3, info.operador.simboloUi.toString())
+                stmt.setString(2, info.operador.simboloUi.toString().take(1))
+                stmt.setDouble(3, info.numero2)
                 stmt.setDouble(4, info.resultado)
                 stmt.executeUpdate()
             } else if (info is String) {
