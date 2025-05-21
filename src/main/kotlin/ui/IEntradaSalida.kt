@@ -9,4 +9,5 @@ interface IEntradaSalida {
     fun preguntar(msj: String = "¿Deseas intentarlo de nuevo? (s/n): "): Boolean
     fun limpiarPantalla(numSaltos: Int = 20)
     fun pausar(msj: String = "Pulse Enter para Continuar...")
+    fun saltoLinea()
 }

@@ -65,7 +65,7 @@ class Consola : IEntradaSalida {
             System.out.flush()
         } else {
             repeat(numSaltos) {
-                mostrar("")
+                saltoLinea()
             }
         }
     }
@@ -75,7 +75,11 @@ class Consola : IEntradaSalida {
      */
     override fun pausar(msj: String) {
         pedirInfo("\n" + msj)
-        mostrar()
+        saltoLinea()
+    }
+
+    override fun saltoLinea() {
+        mostrar("")
     }
 
 }

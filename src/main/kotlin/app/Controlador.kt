@@ -1,7 +1,7 @@
 package es.prog2425.calcBD.app
 
 import es.prog2425.calcBD.model.Operador
-import es.prog2425.calcBD.service.IServicioLogDAO
+import es.prog2425.calcBD.service.IServicioLog
 import es.prog2425.calcBD.service.ServicioCalc
 import es.prog2425.calcBD.ui.IEntradaSalida
 
@@ -12,7 +12,7 @@ import es.prog2425.calcBD.ui.IEntradaSalida
 class Controlador(
     private val ui: IEntradaSalida,
     private val calculadora: ServicioCalc,
-    private val gestorLog: IServicioLogDAO
+    private val gestorLog: IServicioLog
 ) {
 
     companion object {
@@ -26,7 +26,9 @@ class Controlador(
     fun iniciar(args: Array<String>) {
         if (!procesarArgumentos(args)) return
 
-        mostrarInfo(gestorLog.obtenerInfoUltimoLog())
+        mostrarInfo(gestorLog.getInfoUltimoLog())
+
+        gestorLog.crearNuevoLog()
 
         if (args.size == 4) ejecutarCalculoConArgumentos(args)
 
@@ -50,7 +52,9 @@ class Controlador(
             }
         }
 
-        ui.mostrar("Modo base de datos activo. Ignorando ruta: $ruta")
+        if (gestorLog.crearRutaLog(ruta)) {
+            ui.mostrar("Ruta $ruta creada")
+        }
 
         return true
     }

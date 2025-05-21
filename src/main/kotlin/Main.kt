@@ -1,15 +1,20 @@
 package es.prog2425.calcBD
 
+import es.prog2425.calcBD.app.BDManager
 import es.prog2425.calcBD.app.Controlador
+import es.prog2425.calcBD.app.ProgramaManager
+import es.prog2425.calcBD.data.RepoLogTxt
 import es.prog2425.calcBD.data.dao.RepoLogDAOH2
 import es.prog2425.calcBD.data.db.DatasourceFactory
 import es.prog2425.calcBD.data.db.Mode
 import es.prog2425.calcBD.service.ServicioCalc
+import es.prog2425.calcBD.service.ServicioLog
 import es.prog2425.calcBD.service.ServicioLogDAO
 import es.prog2425.calcBD.ui.Consola
+import es.prog2425.calcBD.utils.GestorFichTxt
 
-//Menu de mirar logs
-//menu de usar o el programa de diego o con bd
+
+//Controlar errores de las conexiones como en las ramas
 
 /**
  * Punto de entrada de la aplicación.
@@ -20,9 +25,13 @@ import es.prog2425.calcBD.ui.Consola
 fun main(args: Array<String>) {
     val ds = DatasourceFactory.getDataSource(Mode.HIKARI)
 
-    val repoLogDAO = RepoLogDAOH2(ds)                  // DAO que usa H2
-    val servicioLog = ServicioLogDAO(repoLogDAO)
+    val repoLogDAOH2 = RepoLogDAOH2(ds)
+    val servicioLog = ServicioLogDAO(repoLogDAOH2)
+    val repoLog = RepoLogTxt(GestorFichTxt())
 
-    Controlador(Consola(), ServicioCalc(), servicioLog).iniciar(args)
+    ProgramaManager(Consola(),
+        Controlador(Consola(), ServicioCalc(), ServicioLog(repoLog)),
+        BDManager(Consola(), ServicioCalc(), servicioLog),
+        args).programa()
 
 }
