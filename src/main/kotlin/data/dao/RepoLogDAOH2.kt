@@ -26,12 +26,13 @@ class RepoLogDAOH2(private val ds: DataSource) : IRepoLogDAO {
         return lista
     }
 
-    override fun getInfoUltimoLog(): List<String> {
+    override fun getInfoUltimoLog(limit: Int): List<String> {
         val lista = mutableListOf<String>()
-        val sql = "SELECT fecha, numero1, operador, numero2, resultado FROM Operaciones ORDER BY fecha DESC LIMIT 5"
+        val sql = "SELECT fecha, numero1, operador, numero2, resultado FROM Operaciones ORDER BY fecha DESC LIMIT ?"
 
         ds.connection.use { conn ->
             val stmt = conn.prepareStatement(sql)
+            stmt.setInt(1, limit)
 
             val rs = stmt.executeQuery()
             while (rs.next()) {
@@ -59,5 +60,22 @@ class RepoLogDAOH2(private val ds: DataSource) : IRepoLogDAO {
                 stmt.executeUpdate()
             }
         }
+    }
+
+    override fun getUltimosErrores(limit: Int): List<String> {
+        val lista = mutableListOf<String>()
+        val sql = "SELECT fecha, mensaje FROM Errores ORDER BY fecha DESC LIMIT ?"
+
+        ds.connection.use { conn ->
+            val stmt = conn.prepareStatement(sql)
+            stmt.setInt(1, limit)
+
+            val rs = stmt.executeQuery()
+            while (rs.next()) {
+                val linea = "${rs.getTimestamp("fecha")} ---> ${rs.getString("mensaje")}"
+                lista.add(linea)
+            }
+        }
+        return lista
     }
 }

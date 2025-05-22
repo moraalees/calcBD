@@ -7,7 +7,10 @@ import es.prog2425.calcBD.model.Operador
 class ServicioLogDAO(private val dao: IRepoLogDAO): IServicioLogDAO {
     override fun obtenerTodos(): List<Calculo> = dao.getAll()
 
-    override fun obtenerInfoUltimoLog(): List<String> = dao.getInfoUltimoLog()
+    override fun obtenerInfoUltimoLog(limit: Int): List<String>{
+        require(limit > 0){ "El número de columnas a obtener debe ser mayor que 0." }
+        return dao.getInfoUltimoLog(limit)
+    }
 
     override fun registrarEntradaLog(info: Any) {
         when (info) {
@@ -26,5 +29,10 @@ class ServicioLogDAO(private val dao: IRepoLogDAO): IServicioLogDAO {
                 dao.registrarEntradaLog("Tipo no soportado para registrar en log: ${info::class.simpleName}")
             }
         }
+    }
+
+    override fun obtenerUltimosErrores(limit: Int): List<String> {
+        require(limit > 0){ "Debes elegir más de 1 dato a revisar." }
+        return dao.getUltimosErrores(limit)
     }
 }

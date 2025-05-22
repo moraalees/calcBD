@@ -17,7 +17,7 @@ class ProgramaManager(
             ui.limpiarPantalla(10)
             mostrarMenu()
             ui.saltoLinea()
-            val entrada = ui.pedirInfo("Elige una opción (o escribe):")
+            val entrada = ui.pedirInfo("Elige una opción (o escribe): ")
             when (entrada){
                 "1", "log" -> menuLogs.iniciar(args)
                 "2", "bd" -> menuBd.programaBd()

@@ -4,6 +4,7 @@ import es.prog2425.calcBD.model.Calculo
 
 interface IRepoLogDAO {
     fun getAll(): List<Calculo>
-    fun getInfoUltimoLog(): List<String>
+    fun getInfoUltimoLog(limit: Int): List<String>
     fun registrarEntradaLog(info: Any)
+    fun getUltimosErrores(limit: Int): List<String>
 }
