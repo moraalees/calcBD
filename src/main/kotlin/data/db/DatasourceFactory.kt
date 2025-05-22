@@ -5,6 +5,11 @@ import com.zaxxer.hikari.HikariDataSource
 import org.h2.jdbcx.JdbcDataSource
 import javax.sql.DataSource
 
+/**
+ * Clase para declarar instancias de [DataSource] según el modo escogido (en mi programa HikariCP).
+ *
+ * Soporta conexiones simples a través de HikariCP.
+ */
 object DatasourceFactory {
     private const val JDBC_URL = "jdbc:h2:file:./data/calculadora"
     private const val USER = "cristian"

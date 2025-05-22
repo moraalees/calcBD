@@ -17,8 +17,14 @@ import es.prog2425.calcBD.utils.GestorFichTxt
 /**
  * Punto de entrada de la aplicación.
  *
- * Inicializa los componentes necesarios de la arquitectura (UI, repositorio, servicio, lógica de negocio)
- * y delega el control al controlador principal de la aplicación.
+ * Inicializa los componentes necesarios de la arquitectura:
+ * - Fuente de datos para acceso a base de datos H2, en el caso dado, HikariCP.
+ * - Repositorios de logs (en base de datos y archivo de texto).
+ * - Servicios de cálculo y de gestión de logs.
+ * - Interfaces de usuario por consola.
+ *
+ * Finalmente, llama a ProgramaManager, que comienza la ejecución
+ * principal según los argumentos.
  */
 fun main(args: Array<String>) {
     val ds = DatasourceFactory.getDataSource(Mode.HIKARI)
@@ -31,5 +37,4 @@ fun main(args: Array<String>) {
         Controlador(Consola(), ServicioCalc(), ServicioLog(repoLog)),
         BDManager(Consola(), ServicioCalc(), servicioLog),
         args).programa()
-
 }

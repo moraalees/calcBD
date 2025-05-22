@@ -78,6 +78,9 @@ class Consola : IEntradaSalida {
         saltoLinea()
     }
 
+    /**
+     * Muestra una línea vacía simulando un salto de línea.
+     */
     override fun saltoLinea() {
         mostrar("")
     }

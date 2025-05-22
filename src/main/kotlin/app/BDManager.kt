@@ -6,12 +6,24 @@ import es.prog2425.calcBD.service.IServicioLogDAO
 import es.prog2425.calcBD.ui.IEntradaSalida
 import java.sql.SQLException
 
+/**
+ * Clase encargada de gestionar el menú de operaciones relacionadas con la base de datos.
+ *
+ * @property ui Interfaz de entrada y salida con el usuario.
+ * @property calculadora Servicio encargado de realizar cálculos matemáticos.
+ * @property servicioLog Servicio encargado de registrar y recuperar datos desde una base de datos.
+ */
 class BDManager(
     private val ui: IEntradaSalida,
     private val calculadora: ServicioCalc,
     private val servicioLog: IServicioLogDAO
 ) {
 
+    /**
+     * Función principal del menú de base de datos.
+     *
+     * Ejecuta un bucle que muestra opciones al usuario y responde según la entrada .
+     */
     fun programaBd() {
         var salir = false
         while (!salir) {
@@ -26,10 +38,14 @@ class BDManager(
                 "4", "borra1" -> borrarTablaOperaciones()
                 "5", "borra2" -> borrarTablaErrores()
                 "6", "salir" -> salir = salirPrograma()
+                else -> ui.mostrarError("Opción inválida")
             }
         }
     }
 
+    /**
+     * Muestra el menú de opciones disponibles para las operaciones con base de datos.
+     */
     private fun mostrarMenu(){
         ui.mostrar("""
             ----MENÚ BD----
@@ -51,6 +67,11 @@ class BDManager(
         return true
     }
 
+    /**
+     * Pregunta al usuario cuántas operaciones desea consultar y muestra los registros más recientes.
+     *
+     * Maneja errores comunes como argumentos inválidos o fallos de base de datos.
+     */
     private fun mostrarUltimosLogs() {
         val num = ui.pedirEntero("Ingrese el número de errores que desa consultar: ")
         if (num != null){
@@ -63,15 +84,20 @@ class BDManager(
                     logs.forEach { ui.mostrar(it) }
                 }
             } catch (e: SQLException) {
-                ui.mostrarError("Error en la BD: ${e.message}")
+                ui.mostrarError("${e.message}")
             } catch (e: IllegalArgumentException) {
-                ui.mostrarError("Hubo un error: ${e.message}")
+                ui.mostrarError("${e.message}")
             } catch (e: Exception) {
-                ui.mostrarError("Error inesperado: ${e.message}")
+                ui.mostrarError("${e.message}")
             }
         }
     }
 
+    /**
+     * Solicita al usuario cuántos errores desea consultar y muestra los mensajes más recientes.
+     *
+     * Maneja excepciones para asegurar que el programa no se termine.
+     */
     private fun mostrarUltimosErrores(){
         val num = ui.pedirEntero("Ingrese el número de errores que desa consultar: ")
         if (num != null){
@@ -84,16 +110,20 @@ class BDManager(
                     errores.forEach { ui.mostrar(it) }
                 }
             } catch (e: SQLException) {
-                ui.mostrarError("Error en la BD: ${e.message}")
+                ui.mostrarError("${e.message}")
             } catch (e: IllegalArgumentException) {
-                ui.mostrarError("Hubo un error: ${e.message}")
+                ui.mostrarError("${e.message}")
             } catch (e: Exception) {
-                ui.mostrarError("Error inesperado: ${e.message}")
+                ui.mostrarError("${e.message}")
             }
         }
     }
 
-
+    /**
+     * Solicita al usuario los datos necesarios para realizar una operación matemática.
+     *
+     * Maneja excepciones para asegurar que el programa no se termine.
+     */
     private fun operar(){
         do {
             try {
@@ -123,6 +153,11 @@ class BDManager(
         } while (ui.preguntar())
     }
 
+    /**
+     * Solicita confirmación al usuario y elimina todos los errores registrados en la base de datos.
+     *
+     * Muestra mensajes según el resultado de la operación.
+     */
     private fun borrarTablaErrores(){
         val decision = ui.preguntar("¿Seguro que desa eliminar todo error registrado? ")
         if (decision){
@@ -130,13 +165,18 @@ class BDManager(
                 servicioLog.deleteAllErrores()
                 ui.mostrar("Errores eliminados.")
             } catch (e: SQLException) {
-                ui.mostrarError("Error al eliminar los errores: ${e.message}")
+                ui.mostrarError("${e.message}")
             } catch (e: Exception) {
-                ui.mostrarError("Error inesperado: ${e.message}")
+                ui.mostrarError("${e.message}")
             }
         }
     }
 
+    /**
+     * Solicita confirmación al usuario y elimina todas las operaciones almacenadas en la base de datos.
+     *
+     * Muestra mensajes según el resultado de la operación.
+     */
     private fun borrarTablaOperaciones(){
         val decision = ui.preguntar("¿Seguro que desa eliminar toda operación registrada? ")
         if (decision){
@@ -144,9 +184,9 @@ class BDManager(
                 servicioLog.deleteAllOperaciones()
                 ui.mostrar("Operaciones eliminadas.")
             } catch (e: SQLException) {
-                ui.mostrarError("Error al eliminar las operaciones: ${e.message}")
+                ui.mostrarError("${e.message}")
             } catch (e: Exception) {
-                ui.mostrarError("Error inesperado: ${e.message}")
+                ui.mostrarError("${e.message}")
             }
         }
     }
