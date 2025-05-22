@@ -7,4 +7,6 @@ interface IServicioLogDAO {
     fun obtenerInfoUltimoLog(limit: Int): List<String>
     fun registrarEntradaLog(info: Any)
     fun obtenerUltimosErrores(limit: Int): List<String>
+    fun deleteAllErrores()
+    fun deleteAllOperaciones()
 }

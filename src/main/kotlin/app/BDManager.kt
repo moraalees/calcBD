@@ -23,7 +23,9 @@ class BDManager(
                 "1", "historial" -> mostrarUltimosLogs()
                 "2", "operar" -> operar()
                 "3", "error" -> mostrarUltimosErrores()
-                "4", "salir" -> salir = salirPrograma()
+                "4", "borra1" -> borrarTablaOperaciones()
+                "5", "borra2" -> borrarTablaErrores()
+                "6", "salir" -> salir = salirPrograma()
             }
         }
     }
@@ -34,7 +36,9 @@ class BDManager(
             1. Listar operaciones pasadas (historial)
             2. Hacer operación (operar)
             3. Consultar errores (error)
-            4. Salir
+            4. Borrar Operaciones (borra1)
+            5. Borrar Errores (borra2)
+            6. Salir
         """.trimIndent())
     }
 
@@ -98,10 +102,15 @@ class BDManager(
                 val operador = Operador.getOperador(simbolo) ?: throw InfoCalcException("Operador no válido")
                 val numero2 = ui.pedirDouble("Introduce el segundo número: ") ?: throw InfoCalcException("Número no válido")
 
-                val resultado = calculadora.realizarCalculo(numero1, operador, numero2)
-                ui.mostrar("Resultado: $resultado")
-                servicioLog.registrarEntradaLog(resultado)
-
+                if (operador == Operador.DIVISION && numero2 == 0.0) {
+                    val error = "No se puede dividir por 0..."
+                    ui.mostrarError(error)
+                    servicioLog.registrarEntradaLog(error)
+                } else {
+                    val resultado = calculadora.realizarCalculo(numero1, operador, numero2)
+                    ui.mostrar("Resultado: $resultado")
+                    servicioLog.registrarEntradaLog(resultado)
+                }
             } catch (e: InfoCalcException) {
                 val msj = "Error al ingresar un número: ${e.message}"
                 ui.mostrarError(msj)
@@ -112,5 +121,33 @@ class BDManager(
                 servicioLog.registrarEntradaLog(msj)
             }
         } while (ui.preguntar())
+    }
+
+    private fun borrarTablaErrores(){
+        val decision = ui.preguntar("¿Seguro que desa eliminar todo error registrado? ")
+        if (decision){
+            try {
+                servicioLog.deleteAllErrores()
+                ui.mostrar("Errores eliminados.")
+            } catch (e: SQLException) {
+                ui.mostrarError("Error al eliminar los errores: ${e.message}")
+            } catch (e: Exception) {
+                ui.mostrarError("Error inesperado: ${e.message}")
+            }
+        }
+    }
+
+    private fun borrarTablaOperaciones(){
+        val decision = ui.preguntar("¿Seguro que desa eliminar toda operación registrada? ")
+        if (decision){
+            try {
+                servicioLog.deleteAllOperaciones()
+                ui.mostrar("Operaciones eliminadas.")
+            } catch (e: SQLException) {
+                ui.mostrarError("Error al eliminar las operaciones: ${e.message}")
+            } catch (e: Exception) {
+                ui.mostrarError("Error inesperado: ${e.message}")
+            }
+        }
     }
 }

@@ -23,7 +23,6 @@ class ProgramaManager(
                 "2", "bd" -> menuBd.programaBd()
                 "3", "salir" -> salir = salirPrograma()
             }
-            ui.pausar()
         }
     }
 

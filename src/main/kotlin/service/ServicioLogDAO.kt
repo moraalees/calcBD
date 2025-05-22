@@ -35,4 +35,8 @@ class ServicioLogDAO(private val dao: IRepoLogDAO): IServicioLogDAO {
         require(limit > 0){ "Debes elegir más de 1 dato a revisar." }
         return dao.getUltimosErrores(limit)
     }
+
+    override fun deleteAllErrores() = dao.borrarErrores()
+
+    override fun deleteAllOperaciones() = dao.borrarOperaciones()
 }

@@ -14,8 +14,6 @@ import es.prog2425.calcBD.ui.Consola
 import es.prog2425.calcBD.utils.GestorFichTxt
 
 
-//Controlar errores de las conexiones como en las ramas
-
 /**
  * Punto de entrada de la aplicación.
  *

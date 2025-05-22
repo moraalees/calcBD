@@ -78,4 +78,20 @@ class RepoLogDAOH2(private val ds: DataSource) : IRepoLogDAO {
         }
         return lista
     }
+
+    override fun borrarErrores() {
+        val sql = "DELETE FROM Errores"
+        ds.connection.use { conn ->
+            val stmt = conn.prepareStatement(sql)
+            stmt.executeUpdate()
+        }
+    }
+
+    override fun borrarOperaciones() {
+        val sql = "DELETE FROM Operaciones"
+        ds.connection.use { conn ->
+            val stmt = conn.prepareStatement(sql)
+            stmt.executeUpdate()
+        }
+    }
 }

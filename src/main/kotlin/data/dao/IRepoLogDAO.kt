@@ -7,4 +7,6 @@ interface IRepoLogDAO {
     fun getInfoUltimoLog(limit: Int): List<String>
     fun registrarEntradaLog(info: Any)
     fun getUltimosErrores(limit: Int): List<String>
+    fun borrarErrores()
+    fun borrarOperaciones()
 }
