@@ -29,3 +29,32 @@ Dicha app, sigue una estructura de capetas y clases cumpliendo correctamente con
 - [`Directorio Ui`](https://github.com/moraalees/calcBD/tree/main/src/main/kotlin/ui): Este directorio contiene la clase responsable de la interacción entre consola y usuario, `Consola`. Dicha clase es usada en el programa principal (Directorio App) para manejar diferentes eventos, como pueden ser proporcionar una pausa al programa o limpiar la terminal.
 - [`Directorio Utils`](https://github.com/moraalees/calcBD/tree/main/src/main/kotlin/utils): Este último directorio se encarga de ayudar a las clases de `Data` para, en este caso, proporcionar las rutas y leer los ficheros guardados. Esto es posible gracias a las clases `GestorFichTxt` cuya implementación es `IUtilFich`.
 - [`Main`](https://github.com/moraalees/calcBD/blob/main/src/main/kotlin/Main.kt): Es el archivo principal que llama a la App para que funcione el programa. En esta clase, se crean instancias de todos los DAO y todos los Servicios para luego inyectarlos al programa principal, además de todas las clases convenientes a la hora de la creación de ficheros. Una vez se implementen, empieza el programa.
+
+---
+
+## Flujo del Programa
+
+1. En el `Main` se inicializan instancias del DataSource y los servicios. Tras esto, se llama al programa principal de la clase `ProgramaManager`, inyectando en este todos los servicios y datos correspondientes, como la `Consola`.
+2. El usuario interactúa con el menú gracias a la consola, eligiendo sobre qué entidad desea manipular datos. Según su decisión, podrá acceder a los otros Manager (App) y ahí se abrirá o bien el menú de la gestión por BD o bien la calculadora que guarda en local.
+     - Si se abrió el menú, el usuario podrá elegir entre realizar una operación o consultar / eliminar cualquier registro de la BD.
+     - Si se eligió la forma de ficheros, la calculadora comenzará a pedir datos.
+3. Al pedir los datos, estos se validarán de formas diferentes. Si son válidos, se guardarán o bien en la BD o en la carpeta `/logs`. Si por el contrario se produce un error en la validación, también se guardarán los errores en su sitio correspondiente.
+
+---
+
+## Patrón DAO
+
+Como mencioné anteriormente, este proyecto cumple con el patrón DAO. Dicho patrón de diseño estructural se utiliza para separar la lógica de acceso a datos de la lógica de negocio de una aplicación.
+
+En otras palabras, el DAO actúa como una capa intermedia entre la aplicación y la base de datos, encapsulando todas las operaciones CRUD (Create, Read, Update, Delete) sobre un tipo específico de clase o entidad. 
+
+En mi proyecto, existen las interfaces DAO que definen las operaciones necesarias para la BD. Además, implemento correctamente dichas interfaces en las clases DAO, que contienen el código real para conectarse a la BD y manipular información.
+
+---
+
+## Por qué Data Source
+
+Realmente, me fijé tanto en DriverManager o en DataSource para hacer este proyecto, pero me decanté finalmente por la segunda opción. Esto se debe a varios motivos:
+- Simplicidad: Tras hacer algunas funciones con ambos 'formatos', ya sea cualquiera dentro de la clase DAOH2, me percaté de la diferencia abismal de código entre estos. Esto fue gracias al uso de `.use` en DataSource, ya que se cierran las conexiones instantáneamente, cosa que en Driver Manager no pasa. El factor de que se podría haber dejado abierta la conexión o el Result Set me agobiaba, y fue por esto que preferí Data Source.
+- Control de errores: Me percaté de que al usar Data Source, me era más sencillo la validación de errores a la hora de aplicar la conexión.
+- Separación de responsabilidades: DataSource me permitió aislar la configuración de la conexión, es decir, las constantes de URL, USUARIO y PASSWORD, facilitando cualquier cambio sin necesidad de modificar el código directamente.
